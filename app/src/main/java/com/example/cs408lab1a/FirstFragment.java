@@ -40,42 +40,73 @@ public class FirstFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 int comp = generateComputerGuess("rock");
+                boolean wins = false;
                 if(choices[comp] == "paper"){
                     computerScore += 1;
                     setScore(playerScore, computerScore);
+                    changeWhoWon(false);
                 }
                 else if (choices[comp] == "scissors"){
                     playerScore += 1;
                     setScore(playerScore, computerScore);
+                    changeWhoWon(true);
+                    wins = true;
                 }
+                else{
+                    changeReason();
+                    changeWhoWon();
+                    return;
+                }
+                changeReason("rock",choices[comp], wins);
             }
         });
         binding.paper.setOnClickListener(new View.OnClickListener(){
            @Override
            public void onClick(View view) {
+               boolean wins = false;
                int comp = generateComputerGuess("paper");
                if(choices[comp] == "scissors"){
                    computerScore += 1;
+                   changeWhoWon(false);
                    setScore(playerScore, computerScore);
                }
                else if (choices[comp] == "rock"){
                    playerScore += 1;
+                   changeWhoWon(true);
                    setScore(playerScore, computerScore);
+                   changeWhoWon(true);
+                   wins = true;
                }
+               else{
+                   changeReason();
+                   changeWhoWon();
+                   return;
+               }
+               changeReason("paper",choices[comp], wins);
            }
         });
         binding.scissors.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 int comp = generateComputerGuess("scissors");
+                boolean wins = false;
                 if(choices[comp] == "rock"){
                     computerScore += 1;
                     setScore(playerScore, computerScore);
+                    changeWhoWon(false);
                 }
                 else if (choices[comp] == "paper"){
                     playerScore += 1;
                     setScore(playerScore, computerScore);
+                    changeWhoWon(true);
+                    wins = true;
                 }
+                else{
+                    changeWhoWon();
+                    changeReason();
+                    return;
+                }
+                changeReason("scissors",choices[comp], wins);
             }
         });
 
@@ -94,6 +125,34 @@ public class FirstFragment extends Fragment {
         TextView p = binding.playerUsed;
         p.setText("Player used: "+playerChoice);
         return compGuess;
+    }
+
+    private void changeWhoWon(boolean playerWins){
+        TextView t = binding.winner;
+        if(playerWins){
+            t.setText("Winner: Player");
+        }else{
+            t.setText("Winner: Computer");
+        }
+    }
+    private void changeWhoWon(){
+        TextView t = binding.winner;
+        t.setText("Winner: tie");
+    }
+
+
+    private void changeReason(String playerChose, String compChose, boolean playerWins){
+        TextView t = binding.reason;
+        if(playerWins){
+            t.setText("Reason: " + playerChose + " beats " + compChose);
+        }
+        else{
+            t.setText("Reason: " + compChose + " beats " + playerChose);
+        }
+    }
+    private void changeReason(){
+        TextView t = binding.reason;
+        t.setText("Reason: tie");
     }
 
     @Override
